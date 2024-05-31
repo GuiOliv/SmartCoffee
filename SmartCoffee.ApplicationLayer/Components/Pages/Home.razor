@@ -1,0 +1,48 @@
+﻿@page "/"
+@using SmartCoffee.Business
+@{
+    var model = new HomeModel();
+}
+
+<div class="card rounded-3">
+    <div class="card-header background-black">
+        <div class="row">
+            <div class="col-8">
+                <h1 class="align-middle m-auto">
+                    Products
+                </h1>
+            </div>
+            <div class="d-flex justify-content-center m-auto col-4">
+                <a href="add" class="btn btn-outline-success"><i class="fa-solid fa-plus"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table text-white">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>URL</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in model.Products)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td>@product.Price</td>
+                        <td><a class="btn btn-outline-danger border-0" href="@product.URL"><i class="fas fa-external-link-alt"></i></a></td>
+                        <td><a @onclick="@(e => model.DeleteProduct(product.Id))" class="btn btn-outline-danger border-0"><i class="far fa-trash-alt"></i></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer background-black">
+        <div class="float-end">
+            <h1 class="m-auto">TOTAL: @model.Products.Sum(w => w.Price).ToString("0.00€")</h1>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+﻿@code {
+    [Parameter] public EventCallback<DateTime> OnDateSelected { get; set; }
+    private DateTime selectedDate = DateTime.Today;
+
+    private async Task SubmitDate()
+    {
+        if (OnDateSelected.HasDelegate)
+        {
+            await OnDateSelected.InvokeAsync(selectedDate);
+        }
+    }
+}
+
+<div class="modal show" tabindex="-1" style="display:block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Delivery Date</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="date" @bind="selectedDate" class="form-control" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="SubmitDate">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal.show {
+        display: block;
+    }
+</style>

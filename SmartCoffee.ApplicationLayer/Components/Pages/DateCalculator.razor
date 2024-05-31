@@ -1,0 +1,86 @@
+@page "/date"
+@using SmartCoffee.Business
+@inject IJSRuntime JS
+
+<div class="card">
+    <div class="card-header background-black">
+        <h1 class="align-middle m-auto">
+            Calculate When to Order
+        </h1>
+    </div>
+    <div class="card-body">
+        <table class="table text-white">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in model.Products)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td>@product.Date.ToString("d")</td>
+                        <td><a class="btn btn-outline-danger border-0" href="@product.URL"><i class="fas fa-external-link-alt"></i></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="modal show" tabindex="-1" style="display:block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Delivery Date</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="date" @bind="selectedDate" class="form-control" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" @onclick="SubmitDate">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private DateTime selectedDate = DateTime.Today;
+    DateCalculatorModel model = new DateCalculatorModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+         await JS.InvokeVoidAsync("showModal");
+    }
+
+    private async Task SubmitDate()
+    {
+        await HandleDateSelected(selectedDate);
+    }
+
+    private async Task HandleDateSelected(DateTime date)
+    {
+        if (model.CalculateDates(date))
+        {
+            // Perform any actions needed after calculating the dates
+        }
+        else
+        {
+            // Handle the case where the date is not valid
+        }
+
+        await JS.InvokeVoidAsync("hideModal");
+        StateHasChanged();
+    }
+}
+
+<style>
+    .modal.show {
+        display: block;
+    }
+</style>

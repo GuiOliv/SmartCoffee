@@ -1,0 +1,33 @@
+@page "/chat"
+@using SmartCoffee.Business
+@code{
+    MLModel model = new MLModel();
+    string userInput = string.Empty;
+    string response = string.Empty;
+
+    private void SendMessage()
+    {
+        response = model.Inference(userInput);
+        userInput = string.Empty;
+    }
+}
+
+<div class="card">
+    <div class="card-header">
+        Chat with ML Model
+    </div>
+    <div class="card-body">
+        <div class="chat-output">
+            @if (!string.IsNullOrEmpty(response))
+            {
+                <div class="response">
+                    <strong>Model:</strong> @response
+                </div>
+            }
+        </div>
+        <div class="chat-input">
+            <input type="text" @bind="userInput" @bind:event="oninput" placeholder="Type your message..." class="form-control" />
+            <button @onclick="SendMessage" class="btn btn-primary mt-2">Send</button>
+        </div>
+    </div>
+</div>
